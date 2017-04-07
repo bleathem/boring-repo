@@ -3,20 +3,22 @@ function remoteMathService(cb) {
   var two;
   var oneComplete = false;
   var twoComplete = false;
-  
+
+  function checkIfComplete() {
+    if (oneComplete && twoComplete) {
+      return cb(undefined, one + two);
+    }
+  }
+
   callOneService(function(err, num) {
     one = num;
     oneComplete = true;
-    if (twoComplete) {
-      return cb(undefined, one + two);
-    }
+    checkIfComplete();
   });
   callTwoService(function(err, num) {
     two = num;
     twoComplete = true;
-    if (oneComplete) {
-      return cb(undefined, one + two);
-    }
+    checkIfComplete();
   });
 }
 
